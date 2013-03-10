@@ -1,0 +1,7 @@
+## Interface: 50200
+## Title: KeyMachine
+## Notes: State based keybindings
+## Author: Tuller
+## Version: 5.2.0
+## SavedVariables: KeyMachineDB, KeyMachineVersion
+main.lua
