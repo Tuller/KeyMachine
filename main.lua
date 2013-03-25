@@ -58,7 +58,7 @@ function Addon:GetFrameController()
 		]])
 		
 		frameController:SetAttribute('LoadBindings', [[
-			print('LoadBindings', ...)
+			-- print('LoadBindings', ...)
 					
 			self:ClearBindings() 
 					
@@ -68,7 +68,7 @@ function Addon:GetFrameController()
 		]])
 		
 		frameController:SetAttribute('SetFrameBindings', [[
-			print('SetFrameBindings', ...)	
+			-- print('SetFrameBindings', ...)	
 			
 			local frameID = (...)			
 			for i = 2, select('#', ...) do
@@ -102,7 +102,20 @@ function Addon:CreateVirtualButton(target)
 	button:RegisterForClicks('anyDown')
 	
 	button:SetAttribute('type', 'click')
+	
 	button:SetAttribute('clickbutton', target)
+	
+	button.SetParentButtonPushed = function(self, isPushed)
+		target:SetButtonState(isPushed and 'PUSHED' or 'NORMAL')
+	end
+	
+	button:SetScript('OnMouseUp', function(self)
+		self:SetParentButtonPushed(false) 
+	end)
+	
+	button:SetScript('OnMouseDown', function(self) 
+		self:SetParentButtonPushed(true) 
+	end)
 	
 	self:RegisterVirtualButton(button, target)
 	
@@ -115,12 +128,8 @@ function Addon:RegisterVirtualButton(vButton, target)
 	controller:SetFrameRef('frameToAdd', vButton)
 	controller:SetFrameRef('targetToAdd', target)
 	controller:Execute([[ self:RunAttribute('AddFrame') ]])
-	
-	return self
 end
 
 function Addon:LoadBindings()
 	self:GetFrameController():Execute([[ self:RunAttribute('LoadBindings') ]])
-	
-	return self
 end
